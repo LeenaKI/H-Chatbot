@@ -51,23 +51,29 @@ if "last_metrics" not in st.session_state:
 if "last_sources" not in st.session_state:
     st.session_state.last_sources = []
 
-if "hf_token_set" not in st.session_state:
-    st.session_state.hf_token_set = False
+if "keys_set" not in st.session_state:
+    st.session_state.keys_set = False
 
 # Token Input
-if not st.session_state.hf_token_set:
-    st.info("Please enter your Hugging Face Token to continue.")
-    hf_token = st.text_input("Hugging Face Token", type="password")
+if not st.session_state.keys_set:
+    st.info("Please enter your API Keys to continue.")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        hf_token = st.text_input("Hugging Face Token", type="password")
+    with col2:
+        gemini_key = st.text_input("Gemini API Key", type="password")
     
     if st.button("Start Chatbot"):
-        if hf_token:
+        if hf_token and gemini_key:
             os.environ["HF_TOKEN"] = hf_token
-            st.session_state.hf_token_set = True
-            st.success("Token set! Loading model...")
+            os.environ["GEMINI_API_KEY"] = gemini_key
+            st.session_state.keys_set = True
+            st.success("Keys set! Loading model...")
             time.sleep(1)
             st.rerun()
         else:
-            st.error("Please enter a valid token.")
+            st.error("Please enter both keys.")
     st.stop()
 
 # Import run_query ONLY after token is set to ensure lazy loading works with the token
