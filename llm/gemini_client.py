@@ -7,7 +7,16 @@ from google.genai import types
 load_dotenv()
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+_client_instance = None
+
+def get_client():
+    global _client_instance
+    if _client_instance is None:
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY not found in environment variables")
+        _client_instance = genai.Client(api_key=api_key)
+    return _client_instance
 MODEL_NAME = os.getenv("GEMINI_MODEL")
 
 from google.genai import errors
@@ -21,7 +30,7 @@ def generate_answer(system_prompt, user_prompt, tools=None):
     for attempt in range(max_retries):
         try:
             #Pass 'tools' to the config
-            response = client.models.generate_content(
+            response = get_client().models.generate_content(
                 model=MODEL_NAME,
                 contents=user_prompt,
                 config=types.GenerateContentConfig(
