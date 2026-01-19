@@ -34,7 +34,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Title
-st.title("🚗 Hyundai Sales Buddy")
+st.title("Hyundai Sales Buddy")
 
 # Initialize Session State
 if "messages" not in st.session_state:
@@ -53,7 +53,7 @@ if "last_sources" not in st.session_state:
 
 # Sidebar for Metrics
 with st.sidebar:
-    st.header("📊 Live Metrics")
+    st.header("Live Metrics")
     
     metrics = st.session_state.last_metrics
     if metrics:
@@ -87,7 +87,7 @@ with st.sidebar:
 
     st.divider()
     
-    st.header("📚 Retrieved Sources")
+    st.header("Retrieved Sources")
     sources = st.session_state.last_sources
     if sources:
         seen = set()
@@ -111,14 +111,14 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         if isinstance(message["content"], list):
             # Render Quiz
-            st.write("🎓 **Here is your quiz!**")
+            st.write("**Here is your quiz!**")
             for i, q in enumerate(message["content"], 1):
                 st.markdown(f"**Q{i}: {q.get('question')}**")
                 for opt in q.get('options', []):
                     st.text(f"  {opt}")
                 st.markdown(f"*Correct Answer: {q.get('correct_answer')}*")
                 if q.get('explanation'):
-                    st.info(f"💡 {q.get('explanation')}")
+                    st.info(f"{q.get('explanation')}")
                 st.divider()
         else:
             st.markdown(message["content"])
@@ -150,7 +150,7 @@ if prompt := st.chat_input("Ask about Hyundai cars..."):
                 # Display Answer
                 if isinstance(final_answer, list):
                     # Quiz Mode
-                    st.write("🎓 **Here is your quiz!**")
+                    st.write("**Here is your quiz!**")
                     for i, q in enumerate(final_answer, 1):
                         st.markdown(f"**Q{i}: {q.get('question')}**")
                         for opt in q.get('options', []):
@@ -158,7 +158,7 @@ if prompt := st.chat_input("Ask about Hyundai cars..."):
                         with st.expander(f"Show Answer for Q{i}"):
                             st.success(f"Correct Answer: {q.get('correct_answer')}")
                             if q.get('explanation'):
-                                st.info(f"💡 {q.get('explanation')}")
+                                st.info(f"{q.get('explanation')}")
                     
                     st.session_state.messages.append({"role": "assistant", "content": final_answer})
                 else:
